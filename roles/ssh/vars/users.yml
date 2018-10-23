@@ -1,0 +1,8 @@
+---
+users:
+
+  - username: test_sudo
+    use_sudo: yes
+
+  - username: test
+    use_sudo: no

@@ -1,0 +1,8 @@
+[bastion]
+kpdi-dev-bastion
+[sandbox]
+kpdi-dev-sandbox
+[proxy]
+kpdi-dev-proxy
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3

@@ -1,0 +1,30 @@
+- name: Upgrade System
+  apt: upgrade=dist update_cache=yes
+- name: install php packages
+  apt: name = {{item }} update_cache=yes state=latest
+  with_items:
+     - libapache2-mod-fastcgi
+     - php5.6
+     - php5.6-dev
+     - php5.6-fpm
+     - php5.6-mcrypt
+     - php5.6-mbstring
+     - php5.6-mysql
+     - php5.6-zip
+     - php5.6-gd
+     - php5.6-xml
+     - php5.6-curl
+     - php7.1
+     - php7.1-dev
+     - php7.1-fpm
+     - php7.1-mcrypt
+     - php7.1-mbstring
+     - php7.1-mysql
+     - php7.1-zip
+     - php7.1-gd
+     - php7.1-xml
+     - php7.1-curl
+     - 
+
+  notify:
+    - restart apache2

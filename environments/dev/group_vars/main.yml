@@ -1,0 +1,20 @@
+# Varibles for Role web
+server_admin_email: "test1@localhost.local"
+server_document_root: "/var/www/html"
+
+# Variables for Role nginx
+letsencrypt_email: "emaildi"
+server_ip: "1ip"
+
+# Variables for Role Certbot certs.
+certbot_create_if_missing: false
+certbot_create_method: standalone
+certbot_admin_email: emaildi
+
+certbot_create_standalone_stop_services:
+  - nginx
+  
+
+apache_vhosts:
+    - {servername: "devopstest.com", documentroot: "/var/www/devopstest.com"}
+    - {servername: "devopstest.com", documentroot: "/var/www/devopstest.com"}

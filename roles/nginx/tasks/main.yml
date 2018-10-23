@@ -1,0 +1,28 @@
+- name: Upgrade System
+  apt: upgrade=dist update_cache=yes
+  
+- name: Install nginx
+  apt: name=nginx state=latest
+   
+- name: Remove default nginx config sites-enabled
+  file: name=/etc/nginx/sites-enabled/default state=absent
+  
+- name: Remove default nginx config sites-available
+  file: name=/etc/nginx/sites-available/default state=absent
+  
+- name: Update system nginx.conf config from our template
+  template:
+     src: templates/nginx.conf
+     dest: /etc/nginx/nginx.conf
+     
+    
+- name: Update nginx site for with certbot enrties
+  template:
+     src: templates/reverse_proxy.conf
+     dest: /etc/nginx/sites-enabled/{{ item.servername }}.conf
+  with_items: "{{ apache_vhosts }}"   
+  
+- name: Reload nginx configuration
+  command: nginx -t
+  notify:
+    - restart nginx

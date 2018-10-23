@@ -1,0 +1,34 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: no
+  vars_files:
+    - environments/{{ env }}//group_vars//main.yml
+  roles:
+    # -  ssh 
+     
+- hosts: sandbox
+  become: yes
+  gather_facts: no
+  vars_files:
+     - environments/{{ env }}//group_vars//main.yml
+  roles:
+      -  web
+      -  php
+
+- hosts: proxy
+  become: yes
+  gather_facts: no
+  vars_files:
+     - environments/{{ env }}//group_vars//main.yml
+  roles:
+      -  certbot
+      
+- hosts: proxy
+  become: yes
+  gather_facts: no
+  vars_files:
+     - environments/{{ env }}//group_vars//main.yml
+  roles:
+      -  nginx
+      

@@ -1,0 +1,57 @@
+- name: Upgrade System
+  apt: upgrade=dist update_cache=yes
+- name: install apache2 server
+  apt:
+    name: apache2
+    state: present
+    
+- name: Remove default apache vhost config from sites-enabled
+  file: name=/etc/apache2/sites-enabled/000-default.conf state=absent
+  
+- name: Remove default apache vhost config from sites-available
+  file: name=/etc/apache2/sites-available/000-default.conf state=absent
+  
+- name: Create apache vhosts for each domain
+  template: src=web.conf.j2 dest="/etc/apache2/sites-available/{{ item.servername }}.conf" owner=root group=root mode=0644
+  with_items: "{{ apache_vhosts }}"
+
+- name: Update a2ensite - create symlink to sitesenabled for each domain
+  command: a2ensite {{ item.servername }}
+  with_items: "{{ apache_vhosts }}"
+  args:
+     creates: /etc/apache2/sites-enabled/{{ item.servername }}.conf
+        
+- name: Create directory structure for each domain
+  file: path=/var/www/{{ item.servername }} state=directory
+  with_items: "{{ apache_vhosts }}"
+  
+- name: Create sample index.html for each domain
+  copy:
+      dest: "/var/www/{{ item.servername }}/index.html"
+      content: 'This is sample from {{ item.servername }}'
+  with_items: "{{ apache_vhosts }}"
+        
+
+#- name: update the apache2 vhost configuration
+ # template: 
+  #  src: web.conf.j2
+   # dest: /etc/apache2/sites-available/000-default.conf
+    #owner: root
+    #group: root
+    #mode: 0644
+    
+- name: update the apache2 port configuration
+  template: 
+    src: ports.conf
+    dest: /etc/apache2/ports.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: enable apache2 on startup
+  service:
+    name: apache2
+    enabled: yes
+
+  notify:
+    - restart apache2
