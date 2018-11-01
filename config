@@ -1,0 +1,31 @@
+Host kpdi-dev-bastion
+  Hostname  var_kpdi_dev_bastion
+  User ubuntu
+  StrictHostKeyChecking no
+  IdentityFile ~/terraform-deploy
+
+Host kpdi-dev-proxy
+  Hostname var_kpdi_dev_proxy
+  User ubuntu
+  StrictHostKeyChecking no
+  IdentityFile ~/terraform-deploy
+
+Host kpdi-dev-sandbox
+  Hostname var_kpdi_dev_sandbox
+  User ubuntu
+  StrictHostKeyChecking no
+  IdentityFile ~/terraform-deploy
+  ProxyCommand ssh -W %h:%p kpdi-dev-bastion
+  
+Host kpdi-legacy-dev
+  Hostname 35.173.173.8
+  User ec2-user
+  IdentityFile ~/.ssh/id_rsa
+
+Host kpdi-legacy-prod
+  Hostname 54.159.74.33
+  User ec2-user
+  IdentityFile ~/.ssh/id_rsa
+  ProxyCommand ssh kpdi-legacy-dev -W %h:%p
+
+
