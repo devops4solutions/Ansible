@@ -6,7 +6,7 @@ pipeline {
       stage('checkout') {
            steps {
              
-                git branch: 'develop', url: 'git@git.kpd-i.com:devops/ansible.git'
+                git branch: 'develop', url: 'test.git'
              
           }
         }
@@ -33,7 +33,7 @@ pipeline {
             steps {
                  
                   sh ' cp -rf config ~/.ssh/'
-                  sh 'aws s3 sync s3://terraform-kpdi-development .'
+                  sh 'aws s3 sync s3://terraform-tes-development .'
                   sh ' terraform output >>test.txt'
                   sh './generate_ssh-config.sh dev'
                   sh 'ansible-playbook main.yml -i environments/dev/inventory/hosts --extra-vars env=dev'
